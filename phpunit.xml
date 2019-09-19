@@ -1,0 +1,8 @@
+<phpunit bootstrap="autoload.php">
+  <testsuites>
+    <testsuite name="OpenTexts">
+      <file>tests/OpenTextsTest.php</file>
+      <file>tests/PrepTextTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
