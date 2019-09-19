@@ -5,11 +5,11 @@
  * available as a single string, or as an array with one paragraph
  * per index.
  * It takes one argument: the path to the the required file. For
- * example Texts('/PATH/TO/DIRECTORY/file.txt');
+ * example OpenTexts('/PATH/TO/DIRECTORY/file.txt');
  *
  * Soon, it will have to open docx and pdf files.
  */
-class Texts{
+class OpenTexts{
 
     /** This is the text of the file, returned as a single string*/
     public $text = null;
@@ -32,8 +32,3 @@ class Texts{
         return file('./dummy_data_input/text1.txt', FILE_IGNORE_NEW_LINES); //Why does this fail with $filepath as argument?
     }
 }
-
-
-
-$all_texts = new Texts('./dummy_data_input/text1.txt');
-var_dump($all_texts);

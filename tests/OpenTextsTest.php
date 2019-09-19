@@ -1,9 +1,9 @@
 <?php
 
-require '/home/sam/Programs/php/plagcheck/text_opener.php';
+use \PHPUnit\Framework\TestCase;
 
-class TextOpenerTest extends \PHPUnit_Framework_TestCase
-{
+class OpenTextsTest extends TestCase{
+
     protected $allTexts;
 
     protected function setUp(): void {
@@ -13,9 +13,9 @@ class TextOpenerTest extends \PHPUnit_Framework_TestCase
         fwrite($fp, 'this is the last line');
         fclose($fp);
 
-        $this->allTexts = new Texts('test_data.txt');
-        var_dump($this->allTexts);
+        $this->allTexts = new OpenTexts('test_data.txt');
     }
+
     public function testTextIsLoaded(){
         $text = $this->allTexts->text;
         $this->assertNotEmpty($text, $message = 'Text not loaded');
@@ -26,7 +26,7 @@ class TextOpenerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($paras, $message = 'Text not loaded into paragraph array');
         $this->assertNotCount(0, [$paras]);
     }
-    protected function tearDown(){
+    protected function tearDown(): void {
         unlink('test_data.txt');
     }
 }
