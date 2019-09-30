@@ -2,12 +2,15 @@
 
 class PrepText{
 
-    public $text = null;
-    public $words = null;
+    private $text = null;
+    private $words = null;
 
     public function __construct($inputText){
         $this->text = $inputText;
-        $this->words = $this->getWords();
+    }
+
+    public function getText(){
+        return $this->text;
     }
 
     public function getWords(){
