@@ -6,7 +6,7 @@ use \PHPUnit\Framework\TestCase;
 class PrepTextTest extends TestCase{
 
     protected function setUp(): void {
-        $this->text = "Capitals, punctuation. 'quotes'? sam@email www.soas.ac.uk 197 (Smith, 2018)";
+        $this->text = "...Capitals, punctuation. 'quotes'? sam@email.co.uk www.soas.ac.uk 197 (Smith, 2018)";
         $this->prepObject = new PrepText($this->text);
     }
 
@@ -20,36 +20,47 @@ class PrepTextTest extends TestCase{
         $this->assertEquals($result, $expected);
     }
     public function testIsLower(){
-        $expected = "capitals, punctuation. 'quotes'? sam@email www.soas.ac.uk 197 (smith, 2018)";
-        $result = $this->prepObject->lower($this->text);
-        $this->assertTrue($result == $expected);
-        $this->assertNotRegExp('/[A-Z]/', $result);
+        $expected = "capitals";
+        $result = $this->prepObject->getWords();
+        $this->assertTrue($result[0] == $expected);
+        $this->assertNotRegExp('/[A-Z]/', $result[0]);
     }
 
     /** Note spaces are preserved, punctuation deleted (not made into spaces).*/
     public function testNoPunctuationInner(){
-        $innerPunct = "string, 'with?' -punctuation";
-        $result = $this->prepObject->stripPunct($innerPunct);
-        $expected = "string with punctuation";
+        $result = $this->prepObject->getWords()[2];
+        $expected = "quotes";
         $this->assertEquals($result, $expected);
     }
 
     public function testNoPunctuationOuter(){
-        $outerPunct = "(string), 'with?' -punctuation!";
-        $result = $this->prepObject->stripPunct($outerPunct);
-        $expected = "string with punctuation";
+        $array = $this->prepObject->getWords();
+        $result = $array[count($array) -1];
+        $expected = "2018";
         $this->assertEquals($result, $expected);
     }
 
-    public function testSplitYieldsAnArray(){
-        $array = $this->prepObject->splitIntoWords('one two');
-        $this->assertIsArray($array);
+    public function testEmailsPreserved(){
+        $expected = "sam@email.co.uk";
+        $result = $this->prepObject->getWords()[3];
+        $this->assertEquals($result, $expected);
     }
 
-//    public function testMultiSpacesNotInArray(){
-//        $array = $this->prepObject->splitIntoWords('one   two');
-//        $this->assertEquals(count($array), 2);
-//    }
+    public function testURLsPreserved(){
+        $expected = "www.soas.ac.uk";
+        $result = $this->prepObject->getWords()[4];
+        $this->assertEquals($result, $expected);
+    }
+
+    public function testNumbersPreserved(){
+        $expected = "197";
+        $result = $this->prepObject->getWords()[5];
+        $this->assertEquals($result, $expected);
+    }
+    public function testMultiSpacesNotInArray(){
+        $obj = new PrepText('this   world');  // Multiple spaces.
+        $this->assertEquals(count($obj->getWords()), 2);
+    }
 
     public function testWordsIsArray(){
         $this->assertIsArray($this->prepObject->getWords());

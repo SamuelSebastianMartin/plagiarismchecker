@@ -16,7 +16,8 @@ class PrepText{
     public function getWords(){
         $textLower = $this->lower($this->text);
         $textNoPunct = $this->stripPunct($textLower);
-        $textSplit = $this->splitIntoWords($textNoPunct);
+        $textSingleSpace = $this->singleSpace($textNoPunct);
+        $textSplit = $this->splitIntoWords($textSingleSpace);
         return $textSplit;
     }
 
@@ -31,8 +32,12 @@ class PrepText{
         return $string;
     }
 
+    public function singleSpace($string){
+        $string = preg_replace ('/[[:blank:]]+/', ' ',$string);
+        return $string;
+    }
     public function splitIntoWords($string){
-        $words = preg_split('/\s*/', $string, PREG_SPLIT_NO_EMPTY);
+        $words = explode(' ', $string);
         return $words;
     }
 }
