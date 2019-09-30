@@ -1,6 +1,6 @@
 <?php
 
-//require_once('prepare_texts.php');
+//require_once('PrepText.php');
 
 use \PHPUnit\Framework\TestCase;
 class PrepTextTest extends TestCase{
@@ -10,6 +10,15 @@ class PrepTextTest extends TestCase{
         $this->prepObject = new PrepText($this->text);
     }
 
+    public function testConstructIsNotNull(){
+        $prepObject = new PrepText($this->text);
+        $this->assertNotNull($prepObject->text);
+    }
+    public function testTextIsAccurate(){
+        $expected = $this->text;
+        $result = $this->prepObject->text;
+        $this->assertEquals($result, $expected);
+    }
     public function testIsLower(){
         $expected = "capitals, punctuation. 'quotes'? sam@email www.soas.ac.uk 197 (smith, 2018)";
         $result = $this->prepObject->lower($this->text);
@@ -30,5 +39,18 @@ class PrepTextTest extends TestCase{
         $result = $this->prepObject->stripPunct($outerPunct);
         $expected = "string with punctuation";
         $this->assertEquals($result, $expected);
+    }
+
+    public function testSplitYieldsAnArray(){
+        $array = $this->prepObject->splitIntoWords('one two');
+        $this->assertIsArray($array);
+    }
+
+    public function testMultiSpacesNotInArray(){
+        $array = $this->prepObject->splitIntoWords('one   two');
+        $this->assertEquals(count($array), 2);
+    }
+    public function testWordsIsArray(){
+        $this->assertIsArray($this->prepObject->words);
     }
 }
